@@ -24,25 +24,17 @@
       "media": [
         {
           "type": "png",
-            "name": "IMD_DIAL",
+            "name": "IMG_DIAL",
             "file": "dial.png"
-        }
-      ]
-    },
-    "resources": {
-      "media": [
+        },
         {
           "type": "png",
-            "name": "IMD_HOUR",
+            "name": "IMG_HOUR",
             "file": "hour.png"
-        }
-      ]
-    },
-    "resources": {
-      "media": [
+        },
         {
           "type": "png",
-            "name": "IMD_MINUTE",
+            "name": "IMG_MINUTE",
             "file": "minute.png"
         }
       ]

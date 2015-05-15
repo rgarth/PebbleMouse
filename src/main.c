@@ -15,11 +15,29 @@ static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
 }
 
 static void main_window_load(Window *window) {
+  dial = gbitmap_create_with_resource(RESOURCE_ID_IMG_DIAL);
+  h_hand = gbitmap_create_with_resource(RESOURCE_ID_IMG_HOUR);
+  m_hand = gbitmap_create_with_resource(RESOURCE_ID_IMG_MINUTE);
+  s_dial_layer = rot_bitmap_layer_create(GRect(0, 0, 144, 168));
+  s_hour_layer = rot_bitmap_layer_create(GRect(0, 0, 144, 168));
+  s_minute_layer = bitmap_layer_create(GRect(0, 0, 144, 168));
+  bitmap_layer_set_bitmap(s_dial_layer, dial);
+  rot_bitmap_layer_set_bitmap(s_hour_layer, h_hand);
+  rot_bitmap_layer_set_bitmap(s_minute_layer, m_hand);
+  layer_add_child(window_get_root_layer(window), bitmap_layer_get_layer(s_dial_layer));
+  layer_add_child(window_get_root_layer(window), rot_bitmap_layer_get_layer(s_hour_layer));
+  layer_add_child(window_get_root_layer(window), rot_bitmap_layer_get_layer(s_minute_layer));
 
+  
 }
 
 static void main_window_unload(Window *window) {
-  
+  gbitmap_destroy(dial);
+  gbitmap_destroy(h_hand);
+  gbitmap_destroy(m_hand);
+  bitmap_layer_destroy(s_dial_layer);
+  rot_bitmap_layer_destroy(s_hour_layer);
+  rot_bitmap_layer_destroy(s_minute_layer);
 }
 
 static void init () {
