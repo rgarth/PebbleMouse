@@ -19,5 +19,32 @@
     "versionLabel": "1.0",
     "watchapp": {
         "watchface": true
+    },
+    "resources": {
+      "media": [
+        {
+          "type": "png",
+            "name": "IMD_DIAL",
+            "file": "dial.png"
+        }
+      ]
+    },
+    "resources": {
+      "media": [
+        {
+          "type": "png",
+            "name": "IMD_HOUR",
+            "file": "hour.png"
+        }
+      ]
+    },
+    "resources": {
+      "media": [
+        {
+          "type": "png",
+            "name": "IMD_MINUTE",
+            "file": "minute.png"
+        }
+      ]
     }
 }
