@@ -1,0 +1,23 @@
+{
+    "appKeys": {},
+    "capabilities": [
+        ""
+    ],
+    "companyName": "rgarth@gmail.com",
+    "longName": "Mouse",
+    "projectType": "native",
+    "resources": {
+        "media": []
+    },
+    "sdkVersion": "3",
+    "shortName": "Mouse",
+    "targetPlatforms": [
+        "aplite",
+        "basalt"
+    ],
+    "uuid": "76f80b85-6a17-498e-a297-c25d14b2cb11",
+    "versionLabel": "1.0",
+    "watchapp": {
+        "watchface": true
+    }
+}
