@@ -23,17 +23,17 @@
     "resources": {
       "media": [
         {
-          "type": "png",
+          "type": "pbi8",
             "name": "IMG_DIAL",
             "file": "dial.png"
         },
         {
-          "type": "png",
+          "type": "raw",
             "name": "IMG_HOUR",
             "file": "hour.png"
         },
         {
-          "type": "png",
+          "type": "raw",
             "name": "IMG_MINUTE",
             "file": "minute.png"
         }
