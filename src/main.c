@@ -1,10 +1,10 @@
 #include <pebble.h>
 
 static Window *s_main_window;
-static BitmapLayer *s_dial_layer;
+static BitmapLayer *s_dial_layer, *s_mickey_layer;
 static RotBitmapLayer *s_hour_layer, *s_minute_layer;
   
-GBitmap *dial, *h_hand, *m_hand;
+GBitmap *dial, *mickey, *h_hand, *m_hand;
 
 static void show_time() {
   time_t temp = time(NULL);
@@ -24,9 +24,16 @@ static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
 
 static void main_window_load(Window *window) {
   dial = gbitmap_create_with_resource(RESOURCE_ID_IMG_DIAL);
-  s_dial_layer = bitmap_layer_create(GRect(0, 12, 144, 144));
+  s_dial_layer = bitmap_layer_create(GRect(0, 0, 144, 168));
   bitmap_layer_set_bitmap(s_dial_layer, dial);
+  bitmap_layer_set_compositing_mode(s_dial_layer, GCompOpSet);
   layer_add_child(window_get_root_layer(window), bitmap_layer_get_layer(s_dial_layer));
+
+  mickey = gbitmap_create_with_resource(RESOURCE_ID_IMG_MICKEY);
+  s_mickey_layer = bitmap_layer_create(GRect(0, 12, 144, 144));
+  bitmap_layer_set_bitmap(s_mickey_layer, mickey);
+  bitmap_layer_set_compositing_mode(s_mickey_layer, GCompOpSet);
+  layer_add_child(window_get_root_layer(window), bitmap_layer_get_layer(s_mickey_layer));
 
   m_hand = gbitmap_create_with_resource(RESOURCE_ID_IMG_MINUTE);
   h_hand = gbitmap_create_with_resource(RESOURCE_ID_IMG_HOUR);
@@ -44,17 +51,17 @@ static void main_window_load(Window *window) {
 }
 
 static void main_window_unload(Window *window) {
-  gbitmap_destroy(dial);
+  gbitmap_destroy(mickey);
   gbitmap_destroy(h_hand);
   gbitmap_destroy(m_hand);
-  bitmap_layer_destroy(s_dial_layer);
+  bitmap_layer_destroy(s_mickey_layer);
   rot_bitmap_layer_destroy(s_hour_layer);
   rot_bitmap_layer_destroy(s_minute_layer);
 }
 
 static void init () {
   s_main_window = window_create();  
-  window_set_background_color(s_main_window, GColorBlack); 
+  window_set_background_color(s_main_window, GColorPastelYellow); 
   // Set handlers to manage the elements inside the Window
   window_set_window_handlers(s_main_window, (WindowHandlers) {
     .load = main_window_load,

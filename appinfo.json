@@ -12,7 +12,6 @@
     "sdkVersion": "3",
     "shortName": "Mouse",
     "targetPlatforms": [
-        "aplite",
         "basalt"
     ],
     "uuid": "76f80b85-6a17-498e-a297-c25d14b2cb11",
@@ -23,7 +22,12 @@
     "resources": {
       "media": [
         {
-          "type": "pbi8",
+          "type": "raw",
+          "name": "IMG_MICKEY",
+          "file": "mickey.png"
+        },
+        {
+          "type": "raw",
             "name": "IMG_DIAL",
             "file": "dial.png"
         },
