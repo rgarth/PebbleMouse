@@ -1,10 +1,11 @@
 #include <pebble.h>
+#define KEY_COLOR 0
 
 static Window *s_main_window;
 static BitmapLayer *s_dial_layer, *s_mickey_layer;
-static RotBitmapLayer *s_hour_layer, *s_minute_layer;
-  
+static RotBitmapLayer *s_hour_layer, *s_minute_layer;  
 GBitmap *dial, *mickey, *h_hand, *m_hand;
+int color = 0xFFFFAA;
 
 static void show_time() {
   time_t temp = time(NULL);
@@ -21,6 +22,48 @@ static void show_time() {
 static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
   show_time();
 }
+
+static void inbox_received_callback(DictionaryIterator *iterator, void *context) {
+  APP_LOG(APP_LOG_LEVEL_INFO, "Message received!");
+
+  // Read first item
+  Tuple *t = dict_read_first(iterator);
+
+  // For all items
+  while(t != NULL) {
+    // Which key was received?
+    switch(t->key) {
+    case KEY_COLOR:
+      // color returned as a hex string
+      if (t->value->int32 > 0) {
+        color = t->value->int32;
+        APP_LOG(APP_LOG_LEVEL_INFO, "Saving color: %x", color);
+        window_set_background_color(s_main_window, GColorFromHEX(color)); 
+        persist_write_int(KEY_COLOR, color);
+      }
+      break;
+    default:
+      APP_LOG(APP_LOG_LEVEL_ERROR, "Key %d not recognized!", (int)t->key);
+      break;
+    }
+    // Look for next item
+    t = dict_read_next(iterator);
+  }
+}
+
+
+static void inbox_dropped_callback(AppMessageResult reason, void *context) {
+  APP_LOG(APP_LOG_LEVEL_ERROR, "Message dropped!");
+}
+
+static void outbox_failed_callback(DictionaryIterator *iterator, AppMessageResult reason, void *context) {
+  APP_LOG(APP_LOG_LEVEL_ERROR, "Outbox send failed!");
+}
+
+static void outbox_sent_callback(DictionaryIterator *iterator, void *context) {
+  APP_LOG(APP_LOG_LEVEL_INFO, "Outbox send success!");
+}
+
 
 static void main_window_load(Window *window) {
   dial = gbitmap_create_with_resource(RESOURCE_ID_IMG_DIAL);
@@ -60,8 +103,24 @@ static void main_window_unload(Window *window) {
 }
 
 static void init () {
+  
+  if (persist_exists(KEY_COLOR)) {
+    color = persist_read_int(KEY_COLOR);
+    APP_LOG(APP_LOG_LEVEL_INFO, "Reading color: %x", color);
+  }
+  
+  // Register callbacks
+  app_message_register_inbox_received(inbox_received_callback);
+  app_message_register_inbox_dropped(inbox_dropped_callback);
+  app_message_register_outbox_failed(outbox_failed_callback);
+  app_message_register_outbox_sent(outbox_sent_callback);
+
+  // Open AppMessage
+  app_message_open(app_message_inbox_size_maximum(), app_message_outbox_size_maximum());
+
+
   s_main_window = window_create();  
-  window_set_background_color(s_main_window, GColorPastelYellow); 
+  window_set_background_color(s_main_window, GColorFromHEX(color)); 
   // Set handlers to manage the elements inside the Window
   window_set_window_handlers(s_main_window, (WindowHandlers) {
     .load = main_window_load,

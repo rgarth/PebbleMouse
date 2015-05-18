@@ -1,13 +1,36 @@
 {
-    "appKeys": {},
+    "appKeys": {
+        "KEY_COLOR": 0
+    },
     "capabilities": [
-        ""
+        "configurable"
     ],
     "companyName": "rgarth@gmail.com",
     "longName": "Mouse",
     "projectType": "native",
     "resources": {
-        "media": []
+        "media": [
+            {
+                "file": "data/minute.png",
+                "name": "IMG_MINUTE",
+                "type": "raw"
+            },
+            {
+                "file": "data/hour.png",
+                "name": "IMG_HOUR",
+                "type": "raw"
+            },
+            {
+                "file": "data/dial.png",
+                "name": "IMG_DIAL",
+                "type": "raw"
+            },
+            {
+                "file": "data/mickey.png",
+                "name": "IMG_MICKEY",
+                "type": "raw"
+            }
+        ]
     },
     "sdkVersion": "3",
     "shortName": "Mouse",
@@ -15,32 +38,8 @@
         "basalt"
     ],
     "uuid": "76f80b85-6a17-498e-a297-c25d14b2cb11",
-    "versionLabel": "1.0",
+    "versionLabel": "1.1",
     "watchapp": {
         "watchface": true
-    },
-    "resources": {
-      "media": [
-        {
-          "type": "raw",
-          "name": "IMG_MICKEY",
-          "file": "mickey.png"
-        },
-        {
-          "type": "raw",
-            "name": "IMG_DIAL",
-            "file": "dial.png"
-        },
-        {
-          "type": "raw",
-            "name": "IMG_HOUR",
-            "file": "hour.png"
-        },
-        {
-          "type": "raw",
-            "name": "IMG_MINUTE",
-            "file": "minute.png"
-        }
-      ]
     }
 }
