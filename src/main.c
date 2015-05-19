@@ -71,13 +71,13 @@ static void draw_date(Layer *this_layer, GContext *ctx) {
   char str_mday[] = "32";
   snprintf(str_mday, sizeof(str_mday), "%i", mday);
   graphics_context_set_fill_color(ctx, GColorWhite);
-  graphics_context_set_stroke_color(ctx, GColorBlack);
+  graphics_context_set_stroke_color(ctx, GColorDarkGray);
   graphics_context_set_text_color(ctx, GColorBlack);
-  graphics_fill_rect(ctx, layer_get_bounds(this_layer), 0, GCornerNone);
-  graphics_draw_rect(ctx, layer_get_bounds(this_layer));
+  graphics_fill_rect(ctx, layer_get_bounds(this_layer), 4, GCornersAll);
+  graphics_draw_round_rect(ctx, layer_get_bounds(this_layer), 4);
   graphics_draw_text(ctx,
                      str_mday,
-                     fonts_get_system_font(FONT_KEY_GOTHIC_14_BOLD),
+                     fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD),
                      layer_get_bounds(this_layer), 
                      GTextOverflowModeWordWrap,
                      GTextAlignmentCenter, 
@@ -101,7 +101,7 @@ static void main_window_load(Window *window) {
   layer_add_child(window_get_root_layer(window), bitmap_layer_get_layer(s_mickey_layer));
 
   // Date layer
-  s_date_layer = layer_create(GRect(100, 74, 21, 19));
+  s_date_layer = layer_create(GRect(97, 72, 24, 24));
   layer_set_update_proc(s_date_layer, draw_date);
   layer_add_child(window_get_root_layer(window), s_date_layer);
 
