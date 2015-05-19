@@ -3,13 +3,16 @@
 
 static Window *s_main_window;
 static BitmapLayer *s_dial_layer, *s_mickey_layer;
-static RotBitmapLayer *s_hour_layer, *s_minute_layer;  
+static RotBitmapLayer *s_hour_layer, *s_minute_layer;
+static Layer *s_date_layer;
 GBitmap *dial, *mickey, *h_hand, *m_hand;
 int color = 0xFFFFAA;
+int mday;
 
 static void show_time() {
   time_t temp = time(NULL);
   int minutes = localtime(&temp)->tm_min;
+  mday = localtime(&temp)->tm_mday;
   int32_t m_angle = TRIG_MAX_ANGLE * minutes / 60;
 
   int hour = localtime(&temp)->tm_hour;
@@ -64,20 +67,45 @@ static void outbox_sent_callback(DictionaryIterator *iterator, void *context) {
   APP_LOG(APP_LOG_LEVEL_INFO, "Outbox send success!");
 }
 
+static void draw_date(Layer *this_layer, GContext *ctx) {
+  char str_mday[] = "32";
+  snprintf(str_mday, sizeof(str_mday), "%i", mday);
+  graphics_context_set_fill_color(ctx, GColorWhite);
+  graphics_context_set_stroke_color(ctx, GColorBlack);
+  graphics_context_set_text_color(ctx, GColorBlack);
+  graphics_fill_rect(ctx, layer_get_bounds(this_layer), 0, GCornerNone);
+  graphics_draw_rect(ctx, layer_get_bounds(this_layer));
+  graphics_draw_text(ctx,
+                     str_mday,
+                     fonts_get_system_font(FONT_KEY_GOTHIC_14_BOLD),
+                     layer_get_bounds(this_layer), 
+                     GTextOverflowModeWordWrap,
+                     GTextAlignmentCenter, 
+                     NULL);
+}
+
 
 static void main_window_load(Window *window) {
+  // Dial bitmap layer
   dial = gbitmap_create_with_resource(RESOURCE_ID_IMG_DIAL);
   s_dial_layer = bitmap_layer_create(GRect(0, 0, 144, 168));
   bitmap_layer_set_bitmap(s_dial_layer, dial);
   bitmap_layer_set_compositing_mode(s_dial_layer, GCompOpSet);
   layer_add_child(window_get_root_layer(window), bitmap_layer_get_layer(s_dial_layer));
 
+  // Armless Mickey imaage
   mickey = gbitmap_create_with_resource(RESOURCE_ID_IMG_MICKEY);
   s_mickey_layer = bitmap_layer_create(GRect(0, 12, 144, 144));
   bitmap_layer_set_bitmap(s_mickey_layer, mickey);
   bitmap_layer_set_compositing_mode(s_mickey_layer, GCompOpSet);
   layer_add_child(window_get_root_layer(window), bitmap_layer_get_layer(s_mickey_layer));
 
+  // Date layer
+  s_date_layer = layer_create(GRect(100, 74, 21, 19));
+  layer_set_update_proc(s_date_layer, draw_date);
+  layer_add_child(window_get_root_layer(window), s_date_layer);
+
+  // Arms
   m_hand = gbitmap_create_with_resource(RESOURCE_ID_IMG_MINUTE);
   h_hand = gbitmap_create_with_resource(RESOURCE_ID_IMG_HOUR);
   s_minute_layer = rot_bitmap_layer_create(m_hand);
@@ -94,10 +122,13 @@ static void main_window_load(Window *window) {
 }
 
 static void main_window_unload(Window *window) {
+  gbitmap_destroy(dial);
   gbitmap_destroy(mickey);
   gbitmap_destroy(h_hand);
   gbitmap_destroy(m_hand);
+  bitmap_layer_destroy(s_dial_layer);
   bitmap_layer_destroy(s_mickey_layer);
+  layer_destroy(s_date_layer);
   rot_bitmap_layer_destroy(s_hour_layer);
   rot_bitmap_layer_destroy(s_minute_layer);
 }
